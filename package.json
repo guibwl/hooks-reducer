@@ -1,6 +1,6 @@
 {
   "name": "hooks-reducer",
-  "version": "1.0.4",
+  "version": "2.0.4",
   "description": "Library for reducer in React Hooks",
   "main": "./lib/index.js",
   "scripts": {
@@ -11,6 +11,11 @@
     "build:umd:min": "cross-env NODE_ENV=production rollup -m -c -o dist/hooks-reducer.min.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "files": [
+    "dist",
+    "es",
+    "lib"
+  ],
   "keywords": [
     "hooks-reducer"
   ],

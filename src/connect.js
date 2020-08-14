@@ -3,17 +3,17 @@ import {HooksContext} from './provider';
 
 let _state, _dispatch;
 
-const dispatchWrapper = (action) => {
+const dispatchHandler = (actionResult) => {
 
-  if (typeof action === 'function') {
-    action(_state, dispatchWrapper);
+  if (typeof actionResult === 'function') {
+    actionResult(_state, dispatchHandler);
   }
 
-  if (Object.prototype.toString.call(action) === "[object Object]") {
+  if (Object.prototype.toString.call(actionResult) === "[object Object]") {
 
-    if (typeof action.type !== 'string')
+    if (typeof actionResult.type !== 'string')
         throw new Error('Type is required and expect "string"');
-    _dispatch(action);
+    _dispatch(actionResult);
   }
 }
 
@@ -21,18 +21,9 @@ function actionsWrapper(action) {
 
   return (...args) => {
 
-    const result = action(...args);
+    const actionResult = action(...args);
 
-    if (typeof result === 'function') {
-      result(_state, dispatchWrapper);
-    }
-
-    if (Object.prototype.toString.call(result) === "[object Object]") {
-
-      if (typeof result.type !== 'string')
-          throw new Error('Type is required and expect "string"');
-      _dispatch(result);
-    }
+    dispatchHandler(actionResult);
   }
 }
 
@@ -69,16 +60,13 @@ export default function Connect(
 
       _dispatch = dispatch;
 
-      const enhancedActions = actionsHandler(actions);
-
       const _props = {
           ...props,
           [reducerName]: [state, dispatch]
       }
 
-      if (actionName) {
-        _props[actionName] = enhancedActions;
-      }
+      if (actionName)
+          _props[actionName] = actionsHandler(actions);
 
       return React.createElement(
         component,

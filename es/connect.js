@@ -4,31 +4,22 @@ import { HooksContext } from './provider';
 
 var _state, _dispatch;
 
-var dispatchWrapper = function dispatchWrapper(action) {
-  if (typeof action === 'function') {
-    action(_state, dispatchWrapper);
+var dispatchHandler = function dispatchHandler(actionResult) {
+  if (typeof actionResult === 'function') {
+    actionResult(_state, dispatchHandler);
   }
 
-  if (Object.prototype.toString.call(action) === "[object Object]") {
-    if (typeof action.type !== 'string') throw new Error('Type is required and expect "string"');
+  if (Object.prototype.toString.call(actionResult) === "[object Object]") {
+    if (typeof actionResult.type !== 'string') throw new Error('Type is required and expect "string"');
 
-    _dispatch(action);
+    _dispatch(actionResult);
   }
 };
 
 function actionsWrapper(action) {
   return function () {
-    var result = action.apply(void 0, arguments);
-
-    if (typeof result === 'function') {
-      result(_state, dispatchWrapper);
-    }
-
-    if (Object.prototype.toString.call(result) === "[object Object]") {
-      if (typeof result.type !== 'string') throw new Error('Type is required and expect "string"');
-
-      _dispatch(result);
-    }
+    var actionResult = action.apply(void 0, arguments);
+    dispatchHandler(actionResult);
   };
 }
 
@@ -56,14 +47,10 @@ export default function Connect(component, reducerName, actions, actionName) {
 
     _state = state;
     _dispatch = dispatch;
-    var enhancedActions = actionsHandler(actions);
 
     var _props = _extends({}, props, (_extends2 = {}, _extends2[reducerName] = [state, dispatch], _extends2));
 
-    if (actionName) {
-      _props[actionName] = enhancedActions;
-    }
-
+    if (actionName) _props[actionName] = actionsHandler(actions);
     return React.createElement(component, _props);
   };
 }
