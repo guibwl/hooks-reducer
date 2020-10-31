@@ -1,10 +1,10 @@
 {
   "name": "hooks-reducer",
-  "version": "2.0.5",
+  "version": "2.0.6",
   "description": "Use Redux in React Hooks.",
   "main": "./lib/index.js",
   "scripts": {
-    "build": "npm run build:commonjs && npm run build:es && npm run build:umd && npm run build:umd:min",
+    "build": "npm run build:commonjs && npm run build:es",
     "build:commonjs": "cross-env BABEL_ENV=commonjs babel src --out-dir lib",
     "build:es": "babel src --out-dir es",
     "build:umd": "cross-env NODE_ENV=development rollup -m -c -o dist/hooks-reducer.js",
@@ -33,7 +33,7 @@
     "@babel/plugin-transform-runtime": "^7.11.0",
     "@babel/preset-env": "^7.11.0",
     "cross-env": "^7.0.2",
-    "react": "^16.13.1",
+    "react": "^16.14.0",
     "react-dom": "^16.13.1",
     "rollup": "^2.23.0",
     "rollup-plugin-babel": "^4.4.0",

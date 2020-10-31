@@ -6,7 +6,7 @@ let _state, _dispatch;
 const dispatchHandler = (actionResult) => {
 
   if (typeof actionResult === 'function') {
-    actionResult(_state, dispatchHandler);
+    return actionResult(_state, dispatchHandler);
   }
 
   if (Object.prototype.toString.call(actionResult) === "[object Object]") {
